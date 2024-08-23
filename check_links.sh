@@ -58,9 +58,11 @@ check_link(){
 
 	if ! parse_link "${link}";
 	then
-		echo "\`${link}' is not a valid http url.";
+		echo "\`${link}' is not a valid http url." >&2;
 		return;
 	fi
+	if ! http_return_code="$(curl -fsSL  "${link}" -w '\n%{response_code}' | tail -n 1)";
+	then return 1; else return 0; fi
 }
 
 main(){
@@ -70,3 +72,4 @@ main(){
 	echo "${links[@]}";
 }
 
+main "$1"
