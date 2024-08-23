@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+export RED="\e[0;31m"
+export GRN="\e[0;32m"
+
+
 #First step : Retrieving all the links in a markdown documents
 
 teardown(){
@@ -63,6 +67,16 @@ check_link(){
 	fi
 	if ! http_return_code="$(curl -fsSL  "${link}" -w '\n%{response_code}' | tail -n 1)";
 	then return 1; else return 0; fi
+}
+
+:<<-"CHECK_LINKS"
+	This functions uses the array `links' that has been declared 
+	in the main function. It iterates over the links array and checks
+	whether or not the links is still functionnal. If the link is functionnal,
+	it prints it in green alongside its status code. Otherwise, it prints it in 
+	red
+CHECK_LINKS
+check_links(){
 }
 
 main(){
