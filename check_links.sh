@@ -4,8 +4,12 @@ export RED="\e[0;31m"
 export GRN="\e[0;32m"
 export CRESET="\e[0m"
 
-#First step : Retrieving all the links in a markdown documents
-
+:<<-"TEARDOWN"
+	The teardown function is there to cleanly exit the script 
+	if some unexpected event occurs. For now it only prints a 
+	predefined message but if more cleanup is needed the whole 
+	code won't have to be updated
+TEARDOWN
 teardown(){
 	if [ "$1" != "" ]; then echo "$1"; fi
 	kill -INT $$
