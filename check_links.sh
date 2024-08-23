@@ -2,7 +2,7 @@
 
 export RED="\e[0;31m"
 export GRN="\e[0;32m"
-
+export CRESET="\e[0m"
 
 #First step : Retrieving all the links in a markdown documents
 
