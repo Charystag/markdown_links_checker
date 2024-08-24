@@ -74,9 +74,9 @@ check_extension(){
 	Function to retrieve all the links in a markdown document.
 	The function retrieves the links an puts them in the links
 	array using the following form :
-	line_number:[link_text](link_url)
+	line_number:link_url
 	ex:
-	61:[ListView](https://doc.qt.io/qt-6/qml-qtquick-listview.html)
+	61:https://doc.qt.io/qt-6/qml-qtquick-listview.html
 GET_LINKS
 get_links(){
 	declare document="$1";
@@ -85,7 +85,7 @@ get_links(){
 
 	if [ "$document" = "" ]; then  teardown "Please provide an input document"; fi
 	if ! tmp_file="$(mktemp /tmp/check-links-script.XXXXXXXXXX)" ; then teardown "Couldn't create tmp file" ; fi
-	grep -E '\(http(s)?://\S+\)' -n -o "${document}"  > "${tmp_file}";
+	grep -E "${URL_REGEX}" -n -o "${document}"  > "${tmp_file}";
 	while IFS=$'\n' read -r link;
 	do links+=( "${link}" ); done < "${tmp_file}"
 	rm "$tmp_file";
@@ -133,7 +133,7 @@ check_links(){
 	then report_success "No url found" ; return 0 ; fi
 	for (( i = 0; i < length; ++i ));
 	do 
-		url="$(echo "${links[$i]}" | grep -E "${URL_REGEX}" -o)";
+		url="$(echo "${links[$i]}" | grep -E 'http(s)?://.*' -o)";
 		line="$(echo "${links[$i]}" | grep -E '^[0-9]+:' -o | rev | cut -c 2- | rev)";
 		if ! check_link "${url}" ; 
 		then
