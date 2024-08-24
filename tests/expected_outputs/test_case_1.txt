@@ -1,0 +1,5 @@
+Checking file: `test_case_1.md'
+[0;32mLine: `7'. url: `http://www.google.com' is valid. response_code: `200'[0m
+[0;32mLine: `8'. url: `https://github.com' is valid. response_code: `200'[0m
+[0;32mLine: `12'. url: `https://mail.google.com' is valid. response_code: `200'[0m
+[0;32mLine: `13'. url: `https://news.bbc.co.uk' is valid. response_code: `200'[0m
