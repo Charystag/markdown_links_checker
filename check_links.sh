@@ -15,6 +15,35 @@ teardown(){
 	kill -INT $$
 }
 
+:<<-"COLOR_PRINT"
+	Function to print the strings provided as input in the 
+	required color.
+	This function is not meant to be used directly. Prefer 
+	using report_correct and report_error
+	usage: color_print COLOR string1..stringN
+COLOR_PRINT
+color_print(){
+	printf "%s" "$1"
+	shift 1
+	echo -n "$@" 
+	printf "%s\n" "${CRESET}"
+}
+
+:<<-"REPORT_CORRECT"
+	Function to print the strings provided as argument in green 
+	to inform the user that everything went right
+REPORT_CORRECT
+report_correct(){
+	color_print "${GRN}" "$@";
+}
+
+:<<-"REPORT_ERROR"
+	Function to print the strings provided as argument in red to 
+	inform the user something went wrong
+REPORT_ERROR
+report_error(){
+	color_print "${RED}" "$@";
+}
 
 :<<-GET_LINKS
 	Function to retrieve all the links in a markdown document.
@@ -56,8 +85,8 @@ parse_link(){
 :<<-"CHECK_LINK"
 	This function performs a curl request on the link it receives 
 	if it is a valid link.
-	A variable `http_return_code' should be declared in the enclosing scopr in 
-	order for the return code to be registered. The return code will be returned 
+	A variable `http_response_code' should be declared in the enclosing scope in 
+	order for the response code to be registered. The return code will be returned 
 	as a string
 CHECK_LINK
 check_link(){
@@ -68,7 +97,7 @@ check_link(){
 		echo "\`${link}' is not a valid http url." >&2;
 		return;
 	fi
-	if ! http_return_code="$(curl -fsSL  "${link}" -w '\n%{response_code}' | tail -n 1)";
+	if ! http_response_code="$(curl -fsSL  "${link}" -w '\n%{response_code}' | tail -n 1)";
 	then return 1; else return 0; fi
 }
 
@@ -80,14 +109,21 @@ check_link(){
 	red
 CHECK_LINKS
 check_links(){
-	true
+	declare http_response_code;
+	declare -i length
+
+	length="${#links[@]}"
+	if [ "${length}" -eq 0 ] ; 
+	then echo "No url found" ; return 0 ; fi
+	for (( i = 0; i < ${length}; ++i ));
+	do echo "${links[$i]}" ; done
 }
 
 main(){
 	declare -a links;
 
 	get_links "$1";
-	echo "${links[@]}";
+	check_links;
 }
 
 main "$1"
