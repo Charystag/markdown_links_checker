@@ -89,6 +89,7 @@ markdown_input/test_case_2.md \t expected_output/test_case_2.txt
 RUN_TESTS
 run_tests(){
 	declare	tests="$1";
+	# shellcheck disable=SC2034
 	declare test_comand;
 	declare	expected_output;
 	declare base_command="bash ../check_links.sh";
