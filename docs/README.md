@@ -9,7 +9,8 @@ A tool to check the validity of the http urls in your markdown documents
 1.	[How to use the script ?](#how-to-use-the-script-)
 2.	[Why this script ?](#why-this-script-)
 3.	[How it works](#how-it-works)
-4.	[Demo Video](#demo-video)
+4.	[Technical Considerations](#technical-considerations)
+5.	[Demo Video](#demo-video)
 
 # How to use the script ?
 
@@ -22,6 +23,12 @@ By running it directly from this Github Repositoy. You can run the command :
 curl --connect-timeout 10 -fsSL https://raw.githubusercontent.com/Charystag/markdown_links_checker/master/check_links.sh | bash -s -- doc1.md doc2.md ... docN.md
 ```
 Where doc1..docN are the markdown documents you need to verify
+
+You can also run :
+```bash
+curl --connect-timeout 10 -fsSL https://raw.githubusercontent.com/Charystag/markdown_links_checker/master/check_links.sh | bash -s -- -i ignored doc1.md doc2.md ... docN.md
+```
+Where `ignored` is a file that contains a list of urls that should be ignored by the script
 
 ## Installation
 
@@ -57,6 +64,11 @@ Here is an outline of what the script does :
 	1.	If the response code starts with a 2, the request is considered valid
 	2.	Otherwise, the request is considered invalid
 3.	It writes the result on stdout or stderr depending on whether or not the request was successful
+
+# Technical Considerations
+
+For now, the script has difficulties to handle the escaped parenthesis. I hope to fix that in the future but you're 
+better off ignoring the urls with the `-i` option.
 
 # Demo Video
 Yet to come

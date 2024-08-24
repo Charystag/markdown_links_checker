@@ -7,7 +7,8 @@ Un outil pour vérifier la validité des url http dans vos documents markdown
 1.	[Comment utiliser ce script ?](#comment-utiliser-ce-script-)
 2.	[Pourquoi ce script ?](#pourquoi-ce-script-)
 3.	[Fonctionnement](#fonctionnement)
-4.	[Vidéo de démonstration](#vidéo-de-démonstration)
+4.	[Considérations Techniques](#considérations-techniques)
+5.	[Vidéo de démonstration](#vidéo-de-démonstration)
 
 # Comment utiliser ce script ?
 
@@ -21,12 +22,18 @@ curl --connect-timeout 10 -fsSL https://raw.githubusercontent.com/Charystag/mark
 ```
 Où doc1..docN sont les documents markdown que vous voulez vérifier
 
+Vous pouvez aussi lancer:
+```bash
+curl --connect-timeout 10 -fsSL https://raw.githubusercontent.com/Charystag/markdown_links_checker/master/check_links.sh | bash -s -- -i ignored doc1.md doc2.md ... docN.md
+```
+Où `ignored` est un fichier qui contient une liste d'urls qui doivent être ignorés par le script.
+
 ## Installation
 
 Si vous utilisez `bash` ou `zsh` comme loggin shell, vous pouvez installer le script en lançant :
 ```
 if [ ! -f "$HOME/.local/bin/check_links" ]
-	then curl -fsSL --connect-timeout 10 https://raw.githubusercontent.com/Charystag/markdown_links_checker/master/check_links -o "$HOME/.local/bin/check_links" \
+	then curl -fsSL --connect-timeout 10 https://raw.githubusercontent.com/Charystag/markdown_links_checker/master/check_links.sh -o "$HOME/.local/bin/check_links" \
 	&& { if { echo "$PATH" | grep "$HOME/.local/bin" ; }
 		then echo "PATH=\"$HOME/.local/bin:$PATH\"" >> "$HOME/.$(basename $SHELL)rc"; echo "Path : \`$HOME/.local/bin added to path'" ; . "$HOME/.$(basename $SHELL)rc" ; fi ; } \
 	&& echo "Script installed at : $HOME/.local/bin/check_links"
@@ -56,6 +63,11 @@ Voici un résumé de ce que le script fait :
 	1.	Si ce code commence par un 2, la requête est considérée comme valide
 	2.	Sinon, elle est invalide
 3.	Il affiche le résultat sur `stdout` ou `stderr` en fonction du succès de la requête
+
+# Considérations Techniques
+
+Le script ne peut pas gérer les parenthèses escaped dans les url pour le moment. Si vous en avez dans votre document, vous 
+feriez mieux de les rajouter aux liens ignorés par le script.
 
 # Vidéo de démonstration
 À venir
