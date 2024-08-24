@@ -102,7 +102,7 @@ CHECK_LINK
 check_link(){
 	declare link="$1";
 
-	if [ "$ignored" != "" ] && grep 2>&1 >/dev/null "${link}" "$ignored"; 
+	if [ "$ignored" != "" ] && grep >/dev/null 2>&1 "${link}" "$ignored"; 
 	then http_response_code="299"; return 0; fi
 	if ! http_response_code="$(curl --connect-timeout 10 -fsL  "${link}" -w '\n%{response_code}' 2>/dev/null | tail -n 1)";
 	then return 1; fi
