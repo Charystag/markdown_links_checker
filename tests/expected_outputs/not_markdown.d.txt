@@ -1,0 +1,2 @@
+Checking file: `not_markdown.d'
+[0;31m`markdown_inputs/not_markdown.d' is not a markdown file[0m

@@ -3,3 +3,5 @@ markdown_inputs/test_case_2.md	expected_outputs/test_case_2.txt
 markdown_inputs/test_case_3.md	expected_outputs/test_case_3.txt
 markdown_inputs/simple_urls.md	expected_outputs/simple_urls.txt
 -i ignored markdown_inputs/simple_urls.md	expected_outputs/simple_urls_ignored.txt
+markdown_inputs/test_case_{1..3}.md	expected_outputs/test_case_123.txt
+markdown_inputs/not_markdown.d	expected_outputs/not_markdown.d.txt
