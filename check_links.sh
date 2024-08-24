@@ -102,12 +102,6 @@ CHECK_LINK
 check_link(){
 	declare link="$1";
 
-	:<<-"COMMENT"
-	if ! parse_link "${link}";
-	then
-		return;
-	fi
-	COMMENT
 	if ! http_response_code="$(curl --connect-timeout 10 -fsL  "${link}" -w '\n%{response_code}' 2>/dev/null | tail -n 1)";
 	then return 1; fi
 	if [ "${http_response_code:0:1}" != "2" ] ; then return 1 ; fi
