@@ -73,7 +73,7 @@ get_links(){
 
 	if [ "$document" = "" ]; then  teardown "Please provide an input document"; fi
 	if ! tmp_file="$(mktemp /tmp/check-links-script.XXXXXXXXXX)" ; then teardown "Couldn't create tmp file" ; fi
-	grep -E '\[.+\]\(.+\)' -n -o "${document}"  > "${tmp_file}";
+	grep -E '\(http(s)?://\S+\)' -n -o "${document}"  > "${tmp_file}";
 	while IFS=$'\n' read -r link;
 	do links+=( "${link}" ); done < "${tmp_file}"
 	rm "$tmp_file";
