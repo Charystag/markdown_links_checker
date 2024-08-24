@@ -5,6 +5,7 @@ export GRN="\e[0;32m"
 export CRESET="\e[0m"
 
 URL_REGEX="https?://((\\\([^[:space:])]*\\\))+|[^[:space:])]+)"
+OPTIONS="i:-"
 
 :<<-"TEARDOWN"
 	The teardown function is there to cleanly exit the script 
@@ -15,6 +16,15 @@ TEARDOWN
 teardown(){
 	if [ "$1" != "" ]; then echo "$1"; fi
 	kill -INT $$
+}
+
+:<<-"USAGE"
+	Prints usage string and exits
+USAGE
+usage(){
+	usage_string="usage: check_links [-i ignored_files] [--] files"
+
+	teardown "$usage_string"
 }
 
 :<<-"COLOR_PRINT"
@@ -151,13 +161,37 @@ response_code: \`${http_response_code}'";
 	done
 }
 
+:<<-"PARSE_OPTIONS"
+	Function to parse the command line options. The options currently are :
+
+	requireed:
+		- i: a file that contains a list of urls that are meant to be ignored 
+		because they will return false positives
+PARSE_OPTIONS
+parse_options(){
+	declare optvar;
+
+	while getopts "$OPTIONS" optvar;
+	do case "$optvar" in 
+		i )
+			ignored="$OPTARG";;
+		- )
+			break ;;
+		? )
+			usage ;;
+	esac;done
+}
+
 #See the section "Parameter Expansion" in the bash manual in order to know what the `!' means
 #in terms of expansion. Look for the section about indirection
 #https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html
 main(){
 	declare -i i;
+	declare ignored;
 	declare filename;
 
+	parse_options "$@";
+	shift $(( OPTIND - 1 ));
 	for (( i=1; i<$# + 1; ++i ));
 	do
 		declare -a links;
