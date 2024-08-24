@@ -28,7 +28,7 @@ Where doc1..docN are the markdown documents you need to verify
 If you're using `bash` or `zsh` as your loggin shell, you can install the script by running :
 ```
 if [ ! -f "$HOME/.local/bin/check_links" ]
-	then curl -fsSL --connect-timeout 10 https://raw.githubusercontent.com/Charystag/markdown_links_checker/master/check_links -o "$HOME/.local/bin/check_links" \
+	then curl -fsSL --connect-timeout 10 https://raw.githubusercontent.com/Charystag/markdown_links_checker/master/check_links.sh -o "$HOME/.local/bin/check_links" \
 	&& { if { echo "$PATH" | grep "$HOME/.local/bin" ; }
 		then echo "PATH=\"$HOME/.local/bin:$PATH\"" >> "$HOME/.$(basename $SHELL)rc"; echo "Path : \`$HOME/.local/bin added to path'" ; . "$HOME/.$(basename $SHELL)rc" ; fi ; } \
 	&& echo "Script installed at : $HOME/.local/bin/check_links"
