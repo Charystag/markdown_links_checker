@@ -2,13 +2,14 @@
 
 > :fr: French documentation available [here](/docs/README.fr.md)
 
-A tool to check the validity of the markdown links in your documents
+A tool to check the validity of the http urls in your markdown documents
 
 # Table of Contents
 
-1.	[How to use the script ?](#How-to-use-the-script-)
-2.	[Why this script ?](#Why-this-script-)
-3.	[How it works](#How-it-works)
+1.	[How to use the script ?](#how-to-use-the-script-)
+2.	[Why this script ?](#why-this-script-)
+3.	[How it works](#how-it-works)
+4.	[Demo Video](#demo-video)
 
 # How to use the script ?
 
@@ -24,7 +25,7 @@ Where doc1..docN are the markdown documents you need to verify
 
 ## Installation
 
-If you're using bash or zsh as your logging shell, you can install the script by running :
+If you're using `bash` or `zsh` as your loggin shell, you can install the script by running :
 ```
 if [ ! -f "$HOME/.local/bin/check_links" ]
 	then curl -fsSL --connect-timeout 10 https://raw.githubusercontent.com/Charystag/markdown_links_checker/master/check_links -o "$HOME/.local/bin/check_links" \
