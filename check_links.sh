@@ -97,7 +97,7 @@ check_link(){
 	then
 		return;
 	fi
-	if ! http_response_code="$(curl --connect-timeout 10 -fs  "${link}" -w '\n%{response_code}' 2>/dev/null | tail -n 1)";
+	if ! http_response_code="$(curl --connect-timeout 10 -fsL  "${link}" -w '\n%{response_code}' 2>/dev/null | tail -n 1)";
 	then return 1; fi
 	if [ "${http_response_code:0:1}" != "2" ] ; then return 1 ; fi
 	return 0
