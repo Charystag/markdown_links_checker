@@ -5,6 +5,7 @@ export GRN="\e[0;32m"
 export CRESET="\e[0m"
 
 URL_REGEX="https?://((\\\([^[:space:])]*\\\))+|[^[:space:])]+)"
+OPTIONS="i:-"
 
 :<<-"TEARDOWN"
 	The teardown function is there to cleanly exit the script 
@@ -15,6 +16,15 @@ TEARDOWN
 teardown(){
 	if [ "$1" != "" ]; then echo "$1"; fi
 	kill -INT $$
+}
+
+:<<-"USAGE"
+	Prints usage string and exits
+USAGE
+usage(){
+	usage_string="usage: check_links [-i ignored_files] [--] files"
+
+	teardown "$usage_string"
 }
 
 :<<-"COLOR_PRINT"
@@ -64,9 +74,9 @@ check_extension(){
 	Function to retrieve all the links in a markdown document.
 	The function retrieves the links an puts them in the links
 	array using the following form :
-	line_number:[link_text](link_url)
+	line_number:link_url
 	ex:
-	61:[ListView](https://doc.qt.io/qt-6/qml-qtquick-listview.html)
+	61:https://doc.qt.io/qt-6/qml-qtquick-listview.html
 GET_LINKS
 get_links(){
 	declare document="$1";
@@ -75,27 +85,12 @@ get_links(){
 
 	if [ "$document" = "" ]; then  teardown "Please provide an input document"; fi
 	if ! tmp_file="$(mktemp /tmp/check-links-script.XXXXXXXXXX)" ; then teardown "Couldn't create tmp file" ; fi
-	grep -E '\(http(s)?://\S+\)' -n -o "${document}"  > "${tmp_file}";
+	grep -E "${URL_REGEX}" -n -o "${document}"  > "${tmp_file}";
 	while IFS=$'\n' read -r link;
 	do links+=( "${link}" ); done < "${tmp_file}"
 	rm "$tmp_file";
 	return 0;
 }
-
-:<<-"PARSE_LINK"
-	The parse link function is meant to check the format of a link. It takes a 
-	http url as an argument and returns true if the url is a valid url and false 
-	otherwise
-
-	The url checks now if :
-	- The link begins with `http://' or `https://'
-parse_link(){
-	declare link="$1"
-
-	if ! { echo -n "${link}" | grep -E '^http(s)?://' >/dev/null ;};
-	then return 1; else return 0; fi
-}
-PARSE_LINK
 
 :<<-"CHECK_LINK"
 	This function performs a curl request on the link it receives 
@@ -107,12 +102,8 @@ CHECK_LINK
 check_link(){
 	declare link="$1";
 
-	:<<-"COMMENT"
-	if ! parse_link "${link}";
-	then
-		return;
-	fi
-	COMMENT
+	if [ "$ignored" != "" ] && grep >/dev/null 2>&1 "${link}" "$ignored"; 
+	then http_response_code="299"; return 0; fi
 	if ! http_response_code="$(curl --connect-timeout 10 -fsL  "${link}" -w '\n%{response_code}' 2>/dev/null | tail -n 1)";
 	then return 1; fi
 	if [ "${http_response_code:0:1}" != "2" ] ; then return 1 ; fi
@@ -138,7 +129,7 @@ check_links(){
 	then report_success "No url found" ; return 0 ; fi
 	for (( i = 0; i < length; ++i ));
 	do 
-		url="$(echo "${links[$i]}" | grep -E "${URL_REGEX}" -o)";
+		url="$(echo "${links[$i]}" | grep -E 'http(s)?://.*' -o)";
 		line="$(echo "${links[$i]}" | grep -E '^[0-9]+:' -o | rev | cut -c 2- | rev)";
 		if ! check_link "${url}" ; 
 		then
@@ -151,13 +142,41 @@ response_code: \`${http_response_code}'";
 	done
 }
 
+:<<-"PARSE_OPTIONS"
+	Function to parse the command line options. The options currently are :
+
+	argument required:
+		- i: a file that contains a list of urls that are meant to be ignored 
+		because they will return false positives. The http_response_code will be
+		`299'
+	
+	no argument required:
+		- -: End of options parsing
+PARSE_OPTIONS
+parse_options(){
+	declare optvar;
+
+	while getopts "$OPTIONS" optvar;
+	do case "$optvar" in 
+		i )
+			ignored="$OPTARG";;
+		- )
+			break ;;
+		? )
+			usage ;;
+	esac;done
+}
+
 #See the section "Parameter Expansion" in the bash manual in order to know what the `!' means
 #in terms of expansion. Look for the section about indirection
 #https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html
 main(){
 	declare -i i;
+	declare ignored;
 	declare filename;
 
+	parse_options "$@";
+	shift $(( OPTIND - 1 ));
 	for (( i=1; i<$# + 1; ++i ));
 	do
 		declare -a links;
