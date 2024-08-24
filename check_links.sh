@@ -132,7 +132,7 @@ check_links(){
 	length="${#links[@]}"
 	if [ "${length}" -eq 0 ] ; 
 	then report_success "No url found" ; return 0 ; fi
-	for (( i = 0; i < ${length}; ++i ));
+	for (( i = 0; i < length; ++i ));
 	do 
 		url="$(echo "${links[$i]}" | grep -E 'http.*[^\)]' -o)";
 		line="$(echo "${links[$i]}" | grep -E '^[0-9]+:' -o | rev | cut -c 2- | rev)";
