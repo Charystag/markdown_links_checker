@@ -102,6 +102,8 @@ CHECK_LINK
 check_link(){
 	declare link="$1";
 
+	if [ "$ignored" != "" ] && grep 2>&1 >/dev/null "${link}" "$ignored"; 
+	then http_response_code="299"; return 0; fi
 	if ! http_response_code="$(curl --connect-timeout 10 -fsL  "${link}" -w '\n%{response_code}' 2>/dev/null | tail -n 1)";
 	then return 1; fi
 	if [ "${http_response_code:0:1}" != "2" ] ; then return 1 ; fi
@@ -143,9 +145,13 @@ response_code: \`${http_response_code}'";
 :<<-"PARSE_OPTIONS"
 	Function to parse the command line options. The options currently are :
 
-	requireed:
+	argument required:
 		- i: a file that contains a list of urls that are meant to be ignored 
-		because they will return false positives
+		because they will return false positives. The http_response_code will be
+		`299'
+	
+	no argument required:
+		- -: End of options parsing
 PARSE_OPTIONS
 parse_options(){
 	declare optvar;
