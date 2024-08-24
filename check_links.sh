@@ -92,21 +92,6 @@ get_links(){
 	return 0;
 }
 
-:<<-"PARSE_LINK"
-	The parse link function is meant to check the format of a link. It takes a 
-	http url as an argument and returns true if the url is a valid url and false 
-	otherwise
-
-	The url checks now if :
-	- The link begins with `http://' or `https://'
-parse_link(){
-	declare link="$1"
-
-	if ! { echo -n "${link}" | grep -E '^http(s)?://' >/dev/null ;};
-	then return 1; else return 0; fi
-}
-PARSE_LINK
-
 :<<-"CHECK_LINK"
 	This function performs a curl request on the link it receives 
 	if it is a valid link.
