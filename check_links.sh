@@ -46,6 +46,18 @@ report_error(){
 	color_print "${RED}" "$@" >&2;
 }
 
+:<<-"CHECK_EXTENSION"
+	Function to check that the input file is indeed a markdown file
+CHECK_EXTENSION
+check_extension(){
+	declare	ext;
+
+	if [ "$1" = "" ] ; then return 1 ; fi
+	ext="$(echo "$1" | rev | cut -c 1-3 | rev)"
+	if [ "${ext}" != ".md" ] ; then return 1 ; fi
+	return 0
+}
+
 :<<-GET_LINKS
 	Function to retrieve all the links in a markdown document.
 	The function retrieves the links an puts them in the links
@@ -112,9 +124,10 @@ check_link(){
 CHECK_LINKS
 check_links(){
 	declare http_response_code;
-	declare -i length
-	declare url
-	declare line
+	declare -i length;
+	declare	-i i;
+	declare url;
+	declare line;
 
 	length="${#links[@]}"
 	if [ "${length}" -eq 0 ] ; 
@@ -134,11 +147,24 @@ response_code: \`${http_response_code}'";
 	done
 }
 
+#See the section "Parameter Expansion" in the bash manual in order to know what the `!' means
+#in terms of expansion. Look for the section about indirection
+#https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html
 main(){
-	declare -a links;
+	declare -i i;
+	declare filename;
 
-	get_links "$1";
-	check_links;
+	for (( i=1; i<$# + 1; ++i ));
+	do
+		declare -a links;
+		filename="${!i}";
+		printf "%s\n" "Checking file: \`$(basename "${filename}'")";
+		if ! check_extension "$filename";
+		then report_error "\`${filename}' is not a markdown file";
+		else get_links "${filename}"; check_links;
+		fi
+		unset links;
+	done
 }
 
-main "$1"
+main "$@"
