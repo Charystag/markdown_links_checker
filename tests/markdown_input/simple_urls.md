@@ -1,12 +1,12 @@
-# Test Case: Simple Valid HTTP/HTTPS URLs
+# Test Case: Reachable Valid HTTP/HTTPS URLs
 
 ## Example 1: Standard HTTP/HTTPS Links
 
 This is a valid HTTP link:  
-[Example HTTP](http://example.com)
+[OpenAI HTTP](http://openai.com)
 
 This is a valid HTTPS link:  
-[Example HTTPS](https://example.com)
+[OpenAI HTTPS](https://openai.com)
 
 ## Example 2: URLs with Basic Query Parameters
 
@@ -26,9 +26,8 @@ Here are some valid URLs with anchors:
 
 Here are some valid URLs with different domain structures:
 
-- [Example Subdomain](http://blog.example.com)
-- [Country-Specific Domain](https://example.co.uk)
-- [Organization Domain](https://example.org)
+- [Wikipedia](https://en.wikipedia.org)
+- [BBC](https://www.bbc.com)
 
 ## Example 5: Valid URLs in Different Markdown Elements
 
@@ -36,15 +35,15 @@ Here are some valid URLs with different domain structures:
 
 | Description       | Link                                              |
 |-------------------|---------------------------------------------------|
-| Example Table URL | [Table URL](https://example.com/table_link)       |
+| Example Table URL | [GitHub URL](https://github.com)                  |
 
 ### 5.2: URL in a List
 
-- Valid URL in a list: [List URL](https://example.com/list_link)
+- Valid URL in a list: [Python Official](https://www.python.org)
 
 ### 5.3: URL in a Blockquote
 
-> Here is a valid URL in a blockquote: [Blockquote URL](https://example.com/blockquote_link)
+> Here is a valid URL in a blockquote: [Mozilla Developer Network](https://developer.mozilla.org)
 
 ## Example 6: Redundant Reference Links
 
@@ -52,9 +51,8 @@ Here is a valid redundant reference link:
 
 [Redundant Link][1]
 
-[1]: https://example.com/redundant_link
+[1]: https://www.w3.org
 
 ## Example 7: Valid Mixed Content
 
-Text before the link [Mixed Content](https://example.com/mixed_content) and text after the link.
-
+Text before the link [Microsoft](https://www.microsoft.com) and text after the link.
