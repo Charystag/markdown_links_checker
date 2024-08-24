@@ -19,7 +19,7 @@ teardown(){
 	Function to print the strings provided as input in the 
 	required color.
 	This function is not meant to be used directly. Prefer 
-	using report_correct and report_error
+	using report_success and report_error
 	usage: color_print COLOR string1..stringN
 COLOR_PRINT
 color_print(){
@@ -29,20 +29,21 @@ color_print(){
 	printf "%b\n" "${CRESET}"
 }
 
-:<<-"REPORT_CORRECT"
+:<<-"REPORT_SUCCESS"
 	Function to print the strings provided as argument in green 
 	to inform the user that everything went right
-REPORT_CORRECT
-report_correct(){
+REPORT_SUCCESS
+report_success(){
 	color_print "${GRN}" "$@";
 }
 
 :<<-"REPORT_ERROR"
 	Function to print the strings provided as argument in red to 
-	inform the user something went wrong
+	inform the user something went wrong. This function prints 
+	to stderr
 REPORT_ERROR
 report_error(){
-	color_print "${RED}" "$@";
+	color_print "${RED}" "$@" >&2;
 }
 
 :<<-GET_LINKS
@@ -78,7 +79,7 @@ PARSE_LINK
 parse_link(){
 	declare link="$1"
 
-	if ! { echo -n "${link}" | grep -E '^http(s)?://' ; };
+	if ! { echo -n "${link}" | grep -E '^http(s)?://' >/dev/null ;};
 	then return 1; else return 0; fi
 }
 
@@ -94,11 +95,12 @@ check_link(){
 
 	if ! parse_link "${link}";
 	then
-		echo "\`${link}' is not a valid http url." >&2;
 		return;
 	fi
-	if ! http_response_code="$(curl -fsSL  "${link}" -w '\n%{response_code}' | tail -n 1)";
-	then return 1; else return 0; fi
+	if ! http_response_code="$(curl -fsSL  "${link}" -w '\n%{response_code}' 2>/dev/null | tail -n 1)";
+	then return 1; fi
+	if [ "${http_response_code:0:1}" != "2" ] ; then return 1 ; fi
+	return 0
 }
 
 :<<-"CHECK_LINKS"
@@ -116,12 +118,18 @@ check_links(){
 
 	length="${#links[@]}"
 	if [ "${length}" -eq 0 ] ; 
-	then report_correct "No url found" ; return 0 ; fi
+	then report_success "No url found" ; return 0 ; fi
 	for (( i = 0; i < ${length}; ++i ));
 	do 
 		url="$(echo "${links[$i]}" | grep -E 'http.*[^\)]' -o)";
 		line="$(echo "${links[$i]}" | grep -E '^[0-9]+:' -o | rev | cut -c 2- | rev)";
-		echo "line: ${line}, url: ${url}" ; 
+		if ! check_link "${url}" ; 
+		then
+			report_error "Error on line : \`${line}'. url: \`${url}'. \
+response_code: \`${http_response_code}'";
+		else
+			report_success "Link: ${links[$i]} is valid";
+		fi
 	done
 }
 
