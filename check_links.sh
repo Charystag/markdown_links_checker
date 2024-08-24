@@ -128,7 +128,8 @@ check_links(){
 			report_error "Error on line : \`${line}'. url: \`${url}'. \
 response_code: \`${http_response_code}'";
 		else
-			report_success "Link: ${links[$i]} is valid";
+			report_success "Line: \`${line}'. url: \`${url}' is valid. \
+response_code: \`${http_response_code}'";
 		fi
 	done
 }
