@@ -23,10 +23,10 @@ teardown(){
 	usage: color_print COLOR string1..stringN
 COLOR_PRINT
 color_print(){
-	printf "%s" "$1"
+	printf "%b" "$1"
 	shift 1
 	echo -n "$@" 
-	printf "%s\n" "${CRESET}"
+	printf "%b\n" "${CRESET}"
 }
 
 :<<-"REPORT_CORRECT"
@@ -111,12 +111,18 @@ CHECK_LINKS
 check_links(){
 	declare http_response_code;
 	declare -i length
+	declare url
+	declare line
 
 	length="${#links[@]}"
 	if [ "${length}" -eq 0 ] ; 
-	then echo "No url found" ; return 0 ; fi
+	then report_correct "No url found" ; return 0 ; fi
 	for (( i = 0; i < ${length}; ++i ));
-	do echo "${links[$i]}" ; done
+	do 
+		url="$(echo "${links[$i]}" | grep -E 'http.*[^\)]' -o)";
+		line="$(echo "${links[$i]}" | grep -E '^[0-9]+:' -o | rev | cut -c 2- | rev)";
+		echo "line: ${line}, url: ${url}" ; 
+	done
 }
 
 main(){
