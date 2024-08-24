@@ -4,6 +4,8 @@ export RED="\e[0;31m"
 export GRN="\e[0;32m"
 export CRESET="\e[0m"
 
+URL_REGEX="https?://((\\\([^[:space:])]*\\\))+|[^[:space:])]+)"
+
 :<<-"TEARDOWN"
 	The teardown function is there to cleanly exit the script 
 	if some unexpected event occurs. For now it only prints a 
@@ -87,13 +89,13 @@ get_links(){
 
 	The url checks now if :
 	- The link begins with `http://' or `https://'
-PARSE_LINK
 parse_link(){
 	declare link="$1"
 
 	if ! { echo -n "${link}" | grep -E '^http(s)?://' >/dev/null ;};
 	then return 1; else return 0; fi
 }
+PARSE_LINK
 
 :<<-"CHECK_LINK"
 	This function performs a curl request on the link it receives 
@@ -105,10 +107,12 @@ CHECK_LINK
 check_link(){
 	declare link="$1";
 
+	:<<-"COMMENT"
 	if ! parse_link "${link}";
 	then
 		return;
 	fi
+	COMMENT
 	if ! http_response_code="$(curl --connect-timeout 10 -fsL  "${link}" -w '\n%{response_code}' 2>/dev/null | tail -n 1)";
 	then return 1; fi
 	if [ "${http_response_code:0:1}" != "2" ] ; then return 1 ; fi
@@ -134,7 +138,7 @@ check_links(){
 	then report_success "No url found" ; return 0 ; fi
 	for (( i = 0; i < length; ++i ));
 	do 
-		url="$(echo "${links[$i]}" | grep -E 'http.*[^\)]' -o)";
+		url="$(echo "${links[$i]}" | grep -E "${URL_REGEX}" -o)";
 		line="$(echo "${links[$i]}" | grep -E '^[0-9]+:' -o | rev | cut -c 2- | rev)";
 		if ! check_link "${url}" ; 
 		then
