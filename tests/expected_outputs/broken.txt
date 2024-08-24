@@ -1,0 +1,16 @@
+Checking file: `broken.md'
+[0;31mError on line : `7'. url: `http://thisdomaindoesnotexist123456.com'. response_code: `000'[0m
+[0;31mError on line : `8'. url: `https://thisdomaindoesnotexist123456.com'. response_code: `000'[0m
+[0;31mError on line : `12'. url: `https://www.google.com/thispagedoesnotexist'. response_code: `404'[0m
+[0;31mError on line : `13'. url: `https://github.com/thispagedoesnotexist'. response_code: `404'[0m
+[0;31mError on line : `17'. url: `http://wwww.example.com'. response_code: `000'[0m
+[0;31mError on line : `18'. url: `https://githbusss.com'. response_code: `000'[0m
+[0;31mError on line : `22'. url: `http://example.invalidtld'. response_code: `000'[0m
+[0;31mError on line : `23'. url: `https://website.nonexistenttld'. response_code: `000'[0m
+[0;31mError on line : `27'. url: `https://en.wikipedia.org/wiki/This_Page_Does_Not_Exist'. response_code: `404'[0m
+[0;31mError on line : `28'. url: `https://www.bbc.com/thisarticleisnotfound'. response_code: `404'[0m
+[0;31mError on line : `36'. url: `https://example.com/brokenpath'. response_code: `500'[0m
+[0;31mError on line : `40'. url: `https://example.com/brokenlist'. response_code: `500'[0m
+[0;31mError on line : `44'. url: `https://example.com/brokenquote'. response_code: `500'[0m
+[0;31mError on line : `52'. url: `https://example.com/brokenredundant'. response_code: `500'[0m
+[0;31mError on line : `56'. url: `https://example.com/broken_mixed'. response_code: `500'[0m
