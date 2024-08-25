@@ -1,8 +1,0 @@
-bat tests/markdown_inputs/test_case_1.md	A markdown file full of working links
-curl -fsSL https://github.com/Charystag/markdown_links_checker/blob/master/check_links.sh | bash -s -- tests/markdown_inputs/test_case_1.md	Running the script on the markdown file
-bat tests/markdown_inputs/broken.md	A markdown file with broken links
-curl -fsSL https://github.com/Charystag/markdown_links_checker/blob/master/check_links.sh | bash -s -- tests/markdown_inputs/broken.md	Running the script on the markdown file
-bat tests/markdown_inputs/simple_urls.md	A markdown with a valid link that returns a 403 when curled
-curl -fsSL https://github.com/Charystag/markdown_links_checker/blob/master/check_links.sh | bash -s -- tests/markdown_inputs/simple_urls.md	Running the script on the markdown file
-bat tests/ignored	Here is the structure of the ignored file
-curl -fsSL https://github.com/Charystag/markdown_links_checker/blob/master/check_links.sh | bash -s -- -i tests/ignored tests/markdown_inputs/simple_urls.md	Running the script on the markdown file

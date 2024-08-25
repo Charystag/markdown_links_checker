@@ -3,3 +3,4 @@ Checking file: `test_case_2.md'
 [0;32mLine: `8'. url: `https://www.google.com/search?q=markdown+syntax' is valid. response_code: `200'[0m
 [0;32mLine: `12'. url: `https://www.bing.com/search?q=markdown&format=rss' is valid. response_code: `200'[0m
 [0;32mLine: `13'. url: `https://finance.yahoo.com/quote/AAPL?p=AAPL&.tsrc=fin-srch' is valid. response_code: `200'[0m
+[0;32mbroken links: 0/4[0m

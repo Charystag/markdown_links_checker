@@ -12,3 +12,4 @@ Checking file: `simple_urls.md'
 [0;32mLine: `46'. url: `https://developer.mozilla.org' is valid. response_code: `200'[0m
 [0;32mLine: `54'. url: `https://www.w3.org' is valid. response_code: `200'[0m
 [0;32mLine: `58'. url: `https://www.microsoft.com' is valid. response_code: `200'[0m
+[0;32mbroken links: 0/13[0m

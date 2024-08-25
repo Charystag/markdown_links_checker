@@ -72,8 +72,9 @@ run_test(){
 	if ! tmp_file="$(mktemp /tmp/test_markdown_links_checker.XXXXXXXX)";
 	then teardown "Couldn't open temporary file"; fi
 	(( "++total_tests" ));
-	if ! eval "$1" > "${tmp_file}" 2>&1; then (( "++failed_tests" )); return 1; fi
-	if ! diff "${tmp_file}" "$2" >> "${logfile}" 2>&1; then (( "++failed_tests" )); return 1;fi
+	eval "$1" > "${tmp_file}" 2>&1; 
+	if ! diff "${tmp_file}" "$2" > "/dev/null" 2>&1; then (( "++failed_tests" )); return 1;fi
+	rm "${tmp_file}"
 	return 0;
 }
 
