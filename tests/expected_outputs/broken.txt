@@ -14,3 +14,4 @@ Checking file: `broken.md'
 [0;31mError on line : `44'. url: `https://example.com/brokenquote'. response_code: `500'[0m
 [0;31mError on line : `52'. url: `https://example.com/brokenredundant'. response_code: `500'[0m
 [0;31mError on line : `56'. url: `https://example.com/broken_mixed'. response_code: `500'[0m
+[0;31mbroken links: 15/15[0m
