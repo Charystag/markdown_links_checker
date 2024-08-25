@@ -32,7 +32,7 @@ Où `ignored` est un fichier qui contient une liste d'urls qui doivent être ign
 
 Vous pouvez installer le script en lançant:
 ```
-curl --connect-timeout 10 -fsSL https://raw.githubusercontent.com/Charystag/markdown_links_check/master/assets/install.sh | bash -s -- $SHELL
+curl --connect-timeout 10 -fsSL https://raw.githubusercontent.com/Charystag/markdown_links_checker/master/assets/install.sh | bash -s -- $SHELL
 ```
 
 Vous pouvez ensuite l'utiliser en lançant la commande :

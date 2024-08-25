@@ -34,7 +34,7 @@ Where `ignored` is a file that contains a list of urls that should be ignored by
 
 You can install the script by running:
 ```
-curl --connect-timeout 10 -fsSL https://raw.githubusercontent.com/Charystag/markdown_links_check/master/assets/install.sh | bash -s -- $SHELL
+curl --connect-timeout 10 -fsSL https://raw.githubusercontent.com/Charystag/markdown_links_checker/master/assets/install.sh | bash -s -- $SHELL
 ```
 
 You can then use it by running :
