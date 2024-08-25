@@ -37,7 +37,7 @@ curl --connect-timeout 10 -fsSL https://raw.githubusercontent.com/Charystag/mark
 
 Vous pouvez ensuite l'utiliser en lançant la commande :
 ```
-check_links doc1.md doc2.md ... docN.md
+markdown-links-checker doc1.md doc2.md ... docN.md
 ```
 
 # Pourquoi ce script ?
