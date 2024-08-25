@@ -6,6 +6,7 @@ export CRESET="\e[0m"
 
 URL_REGEX="https?://((\\\([^[:space:])]*\\\))+|[^[:space:])]+)"
 OPTIONS="i:-"
+SCRIPT_NAME="markdown-links-checker"
 
 :<<-"TEARDOWN"
 	The teardown function is there to cleanly exit the script 
@@ -22,7 +23,7 @@ teardown(){
 	Prints usage string and exits
 USAGE
 usage(){
-	usage_string="usage: check_links [-i ignored_files] [--] files"
+	usage_string="usage: ${SCRIPT_NAME} [-i ignored_files] [--] files"
 
 	teardown "$usage_string"
 }
@@ -182,6 +183,8 @@ main(){
 
 	parse_options "$@";
 	shift $(( OPTIND - 1 ));
+	if [ "$1" = "" ];
+	then usage;fi
 	for (( i=1; i<$# + 1; ++i ));
 	do
 		declare -a links;
