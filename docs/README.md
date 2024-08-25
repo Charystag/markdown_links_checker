@@ -32,21 +32,14 @@ Where `ignored` is a file that contains a list of urls that should be ignored by
 
 ## Installation
 
-If you're using `bash` or `zsh` as your loggin shell, you can install the script by running :
+You can install the script by running:
 ```
-if [ ! -f "$HOME/.local/bin/check_links" ]
-	then curl -fsSL --connect-timeout 10 https://raw.githubusercontent.com/Charystag/markdown_links_checker/master/check_links.sh -o "$HOME/.local/bin/check_links" \
-	&& { if { echo "$PATH" | grep "$HOME/.local/bin" ; }
-		then echo "PATH=\"$HOME/.local/bin:$PATH\"" >> "$HOME/.$(basename $SHELL)rc"; echo "Path : \`$HOME/.local/bin added to path'" ; . "$HOME/.$(basename $SHELL)rc" ; fi ; } \
-	&& echo "Script installed at : $HOME/.local/bin/check_links"
-else
-	echo "Script already installed at : $HOME/.local/bin/check_links"
-fi
+curl --connect-timeout 10 -fsSL https://raw.githubusercontent.com/Charystag/markdown_links_check/master/assets/install.sh | bash -s -- $SHELL
 ```
 
 You can then use it by running :
 ```
-check_links doc1.md doc2.md ... docN.md
+markdown-links-checker doc1.md doc2.md ... docN.md
 ```
 
 # Why this script ?

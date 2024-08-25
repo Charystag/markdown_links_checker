@@ -30,16 +30,9 @@ Où `ignored` est un fichier qui contient une liste d'urls qui doivent être ign
 
 ## Installation
 
-Si vous utilisez `bash` ou `zsh` comme loggin shell, vous pouvez installer le script en lançant :
+Vous pouvez installer le script en lançant:
 ```
-if [ ! -f "$HOME/.local/bin/check_links" ]
-	then curl -fsSL --connect-timeout 10 https://raw.githubusercontent.com/Charystag/markdown_links_checker/master/check_links.sh -o "$HOME/.local/bin/check_links" \
-	&& { if { echo "$PATH" | grep "$HOME/.local/bin" ; }
-		then echo "PATH=\"$HOME/.local/bin:$PATH\"" >> "$HOME/.$(basename $SHELL)rc"; echo "Path : \`$HOME/.local/bin added to path'" ; . "$HOME/.$(basename $SHELL)rc" ; fi ; } \
-	&& echo "Script installed at : $HOME/.local/bin/check_links"
-else
-	echo "Script already installed at : $HOME/.local/bin/check_links"
-fi
+curl --connect-timeout 10 -fsSL https://raw.githubusercontent.com/Charystag/markdown_links_check/master/assets/install.sh | bash -s -- $SHELL
 ```
 
 Vous pouvez ensuite l'utiliser en lançant la commande :
