@@ -56,6 +56,7 @@ report_success(){
 REPORT_ERROR
 report_error(){
 	color_print "${RED}" "$@" >&2;
+	exit_status="1"
 }
 
 :<<-"CHECK_EXTENSION"
@@ -104,7 +105,7 @@ check_link(){
 
 	if [ "$ignored" != "" ] && grep >/dev/null 2>&1 "${link}" "$ignored"; 
 	then http_response_code="299"; return 0; fi
-	if ! http_response_code="$(curl --connect-timeout 10 -fsL  "${link}" -w '\n%{response_code}' 2>/dev/null | tail -n 1)";
+	if ! http_response_code="$(curl --connect-timeout 5 -fsL  "${link}" -w '\n%{response_code}' 2>/dev/null | tail -n 1)";
 	then return 1; fi
 	if [ "${http_response_code:0:1}" != "2" ] ; then return 1 ; fi
 	return 0
@@ -129,12 +130,13 @@ check_links(){
 	then report_success "No url found" ; return 0 ; fi
 	for (( i = 0; i < length; ++i ));
 	do 
+		(( ++total_links ))
 		url="$(echo "${links[$i]}" | grep -E 'http(s)?://.*' -o)";
 		line="$(echo "${links[$i]}" | grep -E '^[0-9]+:' -o | rev | cut -c 2- | rev)";
 		if ! check_link "${url}" ; 
 		then
 			report_error "Error on line : \`${line}'. url: \`${url}'. \
-response_code: \`${http_response_code}'";
+response_code: \`${http_response_code}'"; (( ++broken_links ));
 		else
 			report_success "Line: \`${line}'. url: \`${url}' is valid. \
 response_code: \`${http_response_code}'";
@@ -174,6 +176,9 @@ main(){
 	declare -i i;
 	declare ignored;
 	declare filename;
+	declare -i	exit_status=0;
+	declare	-i	broken_links=0;
+	declare -i	total_links=0;
 
 	parse_options "$@";
 	shift $(( OPTIND - 1 ));
@@ -188,6 +193,11 @@ main(){
 		fi
 		unset links;
 	done
+	if [ "$exit_status" -gt "0" ] ;
+	then report_error "broken links: ${broken_links}/${total_links}";
+	else report_success "broken links: ${broken_links}/${total_links}";
+	fi
+	return "${exit_status}"
 }
 
 main "$@"
