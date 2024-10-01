@@ -3,7 +3,7 @@ FROM alpine:latest AS launch
 WORKDIR /
 RUN apk update ;\
 	apk upgrade ;\
-	apk add bash
+	apk add bash curl ;
 
 COPY check_links.sh .
 
