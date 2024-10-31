@@ -47,7 +47,8 @@ color_print(){
 	to inform the user that everything went right
 REPORT_SUCCESS
 report_success(){
-	color_print "${GRN}" "$@";
+	if test -t 1 ; then success_color="${GRN}"; else success_color="";fi
+	color_print "${success_color}" "$@";
 }
 
 :<<-"REPORT_ERROR"
@@ -56,7 +57,8 @@ report_success(){
 	to stderr
 REPORT_ERROR
 report_error(){
-	color_print "${RED}" "$@" >&2;
+	if test -t 1 ; then fail_color="${RED}"; else fail_color="";fi
+	color_print "${fail_color}" "$@" >&2;
 	exit_status="1"
 }
 
@@ -106,7 +108,7 @@ check_link(){
 
 	if [ "$ignored" != "" ] && grep >/dev/null 2>&1 "${link}" "$ignored"; 
 	then http_response_code="299"; return 0; fi
-	if ! http_response_code="$(curl --connect-timeout 5 -fsL  "${link}" -w '\n%{response_code}' 2>/dev/null | tail -n 1)";
+	if ! http_response_code="$(curl --connect-timeout 5 --max-time 5 -fsL  "${link}" -w '\n%{response_code}' 2>/dev/null | tail -n 1)";
 	then return 1; fi
 	if [ "${http_response_code:0:1}" != "2" ] ; then return 1 ; fi
 	return 0
