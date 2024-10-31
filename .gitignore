@@ -1,2 +1,5 @@
 # Vim Swap Files #
 *.swp
+
+# Log files #
+*.log

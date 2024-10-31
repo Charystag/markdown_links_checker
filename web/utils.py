@@ -3,6 +3,34 @@ import os
 import sys
 import stat
 
+
+def next_var(line: str, index: int = 0, begin_sep: str = '`', end_sep: str = "'") -> str
+    var: str = ""
+    index: int = line.find(begin_sep)
+    if (index == -1):
+        return (var)
+    while (index < len(line) and end_sep != "'"):
+        var += line[index]
+        index += 1
+
+#class Result(
+
+class Result:
+    def __init__(self, line: int, url: str, response_code: int):
+        self.line = line
+        self.url = url
+        self.response_code = response_code
+
+    def as_bool(self) -> bool:
+        return (self.response_code >= 200 and self.response_code < 300)
+
+    def parse(line: str) -> Result:
+        line_number: str = ""
+        url: str = ""
+        response_code: str = ""
+        first_index = line.find("`")
+
+
 SCRIPT_PATH="/Users/noahsaintonge/.local/bin/markdown-links-checker"
 
 def my_flatten(grouped: list, flattened: list): 
