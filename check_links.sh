@@ -57,7 +57,7 @@ report_success(){
 	to stderr
 REPORT_ERROR
 report_error(){
-	if test -t 1 ; then fail_color="${RED}"; else fail_color="";fi
+	if test -t 2 ; then fail_color="${RED}"; else fail_color="";fi
 	color_print "${fail_color}" "$@" >&2;
 	exit_status="1"
 }
