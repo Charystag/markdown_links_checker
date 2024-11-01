@@ -4,31 +4,65 @@ import sys
 import stat
 
 
-def next_var(line: str, index: int = 0, begin_sep: str = '`', end_sep: str = "'") -> str
+def next_var(line: str, vars: list, index: int = 0, \
+begin_sep: str = '`', end_sep: str = "'") -> int
+    '''
+    The next var function takes a formatted string as 
+    an input and adds the next value contained 
+    within this formatted string to a list.
+    The function returns -1 if no separator is to be found
+    and the index of the end delitimer of the value otherwise
+    '''
     var: str = ""
     index: int = line.find(begin_sep)
     if (index == -1):
-        return (var)
+        return (index)
     while (index < len(line) and end_sep != "'"):
         var += line[index]
         index += 1
+    vars.append(var)
+    return (index)
 
 #class Result(
 
 class Result:
     def __init__(self, line: int, url: str, response_code: int):
-        self.line = line
-        self.url = url
-        self.response_code = response_code
+        self.line: int = line
+        self.url: str = url
+        self.response_code: int = response_code
 
     def as_bool(self) -> bool:
         return (self.response_code >= 200 and self.response_code < 300)
 
+    @classmethod
     def parse(line: str) -> Result:
-        line_number: str = ""
-        url: str = ""
-        response_code: str = ""
-        first_index = line.find("`")
+        vars: list = []
+        index = 0
+        for i in range(3):
+            index = next_var(line, vars, index)
+            if (index == -1):
+                return (Result(-1, "", -1))
+            if (not (vars[0].isdigit() or vars[2].isdigit())):
+                return (Result(-1, "", -1))
+        return (Result(int(vars[0]), vars[1], int(vars[2])))
+
+class FileResult:
+    def __init__(self, file: str):
+        self.file: str = file
+        self.results: list = []
+        self.links_number: int = 0
+        self.broken_links: int = 0
+    
+    def push(result: Result):
+        if (result.line == -1):
+            return
+        self.results.append(result)
+        self.links_number += 1
+        if (not result.as_bool()):
+            self.broken_links += 1
+
+    def __iter__() -> iter:
+        return (self.results.__iter__())
 
 
 SCRIPT_PATH="/Users/noahsaintonge/.local/bin/markdown-links-checker"
@@ -80,18 +114,20 @@ def run_script(files: list, log_file: str) -> bool:
             return (1)
     os.execv(SCRIPT_PATH, files)
 
-def check_links(target: str, log_file: str) -> str:
+def check_links(target: str, log_file: str) -> int:
     files: list = []
     retrieve_dir_contents(target, files)
     if len(files) == 0:
-        return ("No file provided")
+        return (-1) #No files provided
     try:
         pid: int = os.fork()
     except Exception:
-        return ("Couldn't fork process")
+        return (-2) #Couldn't fork process
     if (pid == 0):
         run_script(files, log_file)
-    os.wait()
+    return (os.waitstatus_to_exitcode(os.wait()[1]))
+
+#def parse_result(log_file: str, results: list) -> list:
 
 if __name__ == '__main__':
     if (len(sys.argv) > 2):
